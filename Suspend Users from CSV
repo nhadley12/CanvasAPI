@@ -1,0 +1,45 @@
+from canvasapi import Canvas
+import pandas as pd
+import csv 
+API_URL = 'yourinstance.instructure.com'
+API_KEY = 'YOUR API KEY'
+
+
+canvas = Canvas(API_URL, API_KEY)
+
+def search_and_destroy():
+    target_account = canvas.get_account(1) 
+    for email in list_of_user_emails:
+      matching_users = target_account.get_users(search_term=email)
+      for user in matching_users:
+        print(user)
+        user.edit(user={'event':'unsuspend'})
+
+
+
+with open('CSV_File_of_User emails to suspend.csv', 'r') as csvfile:
+    csv_reader = csv.reader(csvfile)
+    csv_list = list(csv_reader)
+flattened_list= []
+for sublist in csv_list:
+    for item in sublist:
+        flattened_list.append(item)
+flattened_list.pop(0) #there was some formatting issue it was adding extra text
+      
+list_of_user_emails = flattened_list
+#recheck emails
+print(list_of_user_emails)
+input('Press any key to continue...')
+
+search_and_destroy()
+
+print("User's workstatus changed")
+print('Writing output file')
+
+with open('OUPTPUT_FILE_LOCATION.csv', 'w') as csvwriter:
+    writer = csv.DictWriter(csvwriter, fieldnames=search_results[0].keys())
+    writer.writeheader()
+    for row in search_results:
+        writer.writerow(row)
+
+print('File written, process complete.')
