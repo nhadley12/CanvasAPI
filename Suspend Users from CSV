@@ -1,5 +1,4 @@
 from canvasapi import Canvas
-import pandas as pd
 import csv 
 API_URL = 'yourinstance.instructure.com'
 API_KEY = 'YOUR API KEY'
